@@ -13,6 +13,7 @@ payslips = sys.argv[1:]
 
 def parse_payslip(payslip):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
+    current_sections = []
     payslip_text = subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8")
     for line in payslip_text.splitlines():
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
