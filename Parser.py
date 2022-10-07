@@ -24,7 +24,7 @@ def parse_payslip(payslip):
             # Month Ending needs special treatment
             if re.match(r'.*Month Ending.*', line):
                 parts = re.split(r'Month Ending', line)
-                file_data['Month Ending'] = parts[1].strip()
+                file_data['Heading']['Month Ending'] = parts[1].strip()
             else:
                 # Otherwise, we're mostly Section definitions, like 'Employee Details', 'Payments', 'Deductions', etc.
                 for section in re.split(r'  +', line):
@@ -61,7 +61,7 @@ output.writerow(['Tax code',
 for payslip_data in payslips_data:
     output.writerow([
         payslip_data['Employee Details']['Tax code'],
-        payslip_data['Month Ending'],
+        payslip_data['Heading']['Month Ending'],
         # data['Employee Details']['Works number'],
         payslip_data['Payments']['Monthly pay'],
         payslip_data['Payments']['Bonus'],
