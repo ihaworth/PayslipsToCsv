@@ -6,18 +6,11 @@ from collections import defaultdict
 
 pdf_files = sys.argv[1:]
 
-output = csv.writer(sys.stdout)
-output.writerow(['Tax code',
-                 'Month Ending',
-                 'Monthly pay', 'Bonus', 'Additional pay',
-                 'Tax', 'NI', 'Salary Sacrifice',
-                 'Taxable gross pay', 'Employer NI', 'Net pay'])
-
 # Uncomment these and related lines to see all Sections and/or Elements in the input files
 # all_sections = set()
 # all_elements = set()
 
-for pdf_file in pdf_files:
+def parse_payslip(pdf_file):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
     text_content = str(subprocess.check_output(['pdftotext', '-layout', pdf_file, '-'], encoding="utf-8"))
     for line in text_content.splitlines():
@@ -52,6 +45,18 @@ for pdf_file in pdf_files:
                     section_name = current_sections[section_index][0]
                     file_data[section_name][element_name] = element_value
                     # all_elements.add(element_name)
+    return file_data
+
+
+output = csv.writer(sys.stdout)
+output.writerow(['Tax code',
+                 'Month Ending',
+                 'Monthly pay', 'Bonus', 'Additional pay',
+                 'Tax', 'NI', 'Salary Sacrifice',
+                 'Taxable gross pay', 'Employer NI', 'Net pay'])
+
+for pdf_file in pdf_files:
+    file_data = parse_payslip(pdf_file)
 
     output.writerow([
         file_data['Employee Details']['Tax code'],
