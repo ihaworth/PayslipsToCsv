@@ -11,6 +11,10 @@ payslips = sys.argv[1:]
 # all_elements = set()
 
 
+def pdftotext(payslip):
+    return subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8")
+
+
 def parse_payslip(payslip_text):
     payslip_data = defaultdict(lambda: defaultdict(lambda: ''))
     current_sections = []
@@ -73,7 +77,7 @@ def write_csv(payslips_data, output_stream=sys.stdout):
         ])
 
 
-payslips_text = [subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8") for payslip in payslips]
+payslips_text = [pdftotext(payslip) for payslip in payslips]
 payslips_data = [parse_payslip(payslip_text) for payslip_text in payslips_text]
 write_csv(payslips_data)
 
