@@ -9,7 +9,7 @@ from collections import defaultdict
 # all_elements = set()
 
 
-def pdftotext(payslip):
+def pdf_to_text(payslip):
     return subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8")
 
 
@@ -76,7 +76,7 @@ def write_csv(payslips_data, output_stream=sys.stdout):
 
 
 payslips = sys.argv[1:]
-payslips_text = [pdftotext(payslip) for payslip in payslips]
+payslips_text = [pdf_to_text(payslip) for payslip in payslips]
 payslips_data = [parse_payslip(payslip_text) for payslip_text in payslips_text]
 write_csv(payslips_data)
 
