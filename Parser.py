@@ -35,7 +35,7 @@ def parse_payslip(payslip_text):
                     current_sections.append((section_name, start_char))
                     # all_sections.add(section)
 
-        # The real data we're after is on lines that start with a space
+        # The data Elements we're after are on lines that start with a space
         if re.match(r'^ [A-Z]', line):
             # These are all in the sections captured above, so break down the line for each section
             for section_index in range(0, 3):
