@@ -11,10 +11,9 @@ payslips = sys.argv[1:]
 # all_elements = set()
 
 
-def parse_payslip(payslip):
+def parse_payslip(payslip_text):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
     current_sections = []
-    payslip_text = subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8")
     for line in payslip_text.splitlines():
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
         # It also includes Month Ending, plus a few false positives that we parse but don't output
@@ -50,7 +49,8 @@ def parse_payslip(payslip):
     return file_data
 
 
-payslips_data = [parse_payslip(payslip) for payslip in payslips]
+payslips_text = [subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8") for payslip in payslips]
+payslips_data = [parse_payslip(payslip_text) for payslip_text in payslips_text]
 
 output = csv.writer(sys.stdout)
 output.writerow(['Tax code',
