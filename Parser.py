@@ -49,32 +49,33 @@ def parse_payslip(payslip_text):
     return payslip_data
 
 
+def write_csv(payslips_data, output_stream=sys.stdout):
+    output = csv.writer(output_stream)
+    output.writerow(['Tax code',
+                     'Month Ending',
+                     'Monthly pay', 'Bonus', 'Additional pay',
+                     'Tax', 'NI', 'Salary Sacrifice',
+                     'Taxable gross pay', 'Employer NI', 'Net pay'])
+    for payslip_data in payslips_data:
+        output.writerow([
+            payslip_data['Employee Details']['Tax code'],
+            payslip_data['Heading']['Month Ending'],
+            # data['Employee Details']['Works number'],
+            payslip_data['Payments']['Monthly pay'],
+            payslip_data['Payments']['Bonus'],
+            payslip_data['Payments']['Additional pay'],
+            payslip_data['Deductions']['Tax'],
+            payslip_data['Deductions']['National Insurance'],
+            payslip_data['Deductions']['Salary Sacrifice'],
+            payslip_data['This Month']['Taxable gross pay'],
+            payslip_data['This Month']['Employer National Insurance'],
+            payslip_data['This Month']['Net pay']
+        ])
+
+
 payslips_text = [subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8") for payslip in payslips]
 payslips_data = [parse_payslip(payslip_text) for payslip_text in payslips_text]
-
-output = csv.writer(sys.stdout)
-output.writerow(['Tax code',
-                 'Month Ending',
-                 'Monthly pay', 'Bonus', 'Additional pay',
-                 'Tax', 'NI', 'Salary Sacrifice',
-                 'Taxable gross pay', 'Employer NI', 'Net pay'])
-
-for payslip_data in payslips_data:
-    output.writerow([
-        payslip_data['Employee Details']['Tax code'],
-        payslip_data['Heading']['Month Ending'],
-        # data['Employee Details']['Works number'],
-        payslip_data['Payments']['Monthly pay'],
-        payslip_data['Payments']['Bonus'],
-        payslip_data['Payments']['Additional pay'],
-        payslip_data['Deductions']['Tax'],
-        payslip_data['Deductions']['National Insurance'],
-        payslip_data['Deductions']['Salary Sacrifice'],
-        payslip_data['This Month']['Taxable gross pay'],
-        payslip_data['This Month']['Employer National Insurance'],
-        payslip_data['This Month']['Net pay']
-        ]
-    )
+write_csv(payslips_data)
 
 # print()
 # for section in sorted(all_sections):
