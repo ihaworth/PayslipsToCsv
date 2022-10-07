@@ -1,9 +1,10 @@
 import csv
-import sys
 import re
+import subprocess
+import sys
 from collections import defaultdict
 
-files = sys.argv[1:]
+pdf_files = sys.argv[1:]
 
 output = csv.writer(sys.stdout)
 output.writerow(['Tax code',
@@ -15,10 +16,10 @@ output.writerow(['Tax code',
 # all_sections = set()
 # all_elements = set()
 
-for file in files:
+for pdf_file in pdf_files:
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
-    file_input = open(file, "r")
-    for line in file_input:
+    text_content = str(subprocess.check_output(['pdftotext', '-layout', pdf_file, '-'], encoding="utf-8"))
+    for line in text_content.splitlines():
         # Section details are lines that start immediately at the first char of the line
         # It also includes Month Ending, plus a few false positives that we parse but don't output
         if re.match(r'^[A-Z]', line):
