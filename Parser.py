@@ -32,17 +32,17 @@ def parse_payslip(payslip_text):
             else:
                 # Otherwise, we're mostly Section definitions, like 'Employee Details', 'Payments', 'Deductions', etc.
                 for section in re.split(r'  +', line):
-                    section = section.strip()
-                    start_x = line.find(section)
-                    current_sections.append((section, start_x))
+                    section_name = section.strip()
+                    start_char = line.find(section_name)
+                    current_sections.append((section_name, start_char))
                     # all_sections.add(section)
 
         # The real data we're after is on lines that start with a space
         if re.match(r'^ [A-Z]', line):
             # These are all in the sections captured above, so break down the line for each section
             for section_index in range(0, 3):
-                start_x = current_sections[section_index][1]
-                element_text = line[start_x:start_x + 45]
+                start_char = current_sections[section_index][1]
+                element_text = line[start_char:start_char + 45]
                 parts = re.split(r'  +', element_text)
                 if len(parts) >= 2:
                     element_name = parts[0].strip()
