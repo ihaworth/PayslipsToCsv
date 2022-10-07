@@ -13,8 +13,8 @@ payslips = sys.argv[1:]
 
 def parse_payslip(payslip):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
-    text_content = str(subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8"))
-    for line in text_content.splitlines():
+    payslip_text = str(subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8"))
+    for line in payslip_text.splitlines():
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
         # It also includes Month Ending, plus a few false positives that we parse but don't output
         if re.match(r'^[A-Z]', line):
