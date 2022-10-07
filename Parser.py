@@ -20,13 +20,12 @@ def parse_payslip(payslip_text):
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
         # It also includes Month Ending, plus a few false positives that we parse but don't output
         if re.match(r'^[A-Z]', line):
-            # Reset data about the previous section, so we don't have pollution
+            # Reset data about any previous sections, so we don't include these
             current_sections = []
-
             # Month Ending needs special treatment
             if re.match(r'.*Month Ending.*', line):
-                parts = re.split(r'Month Ending', line)
-                payslip_data['Heading']['Month Ending'] = parts[1].strip()
+                heading_parts = re.split(r'Month Ending', line)
+                payslip_data['Heading']['Month Ending'] = heading_parts[1].strip()
             else:
                 # Otherwise, we're mostly Section definitions, like 'Employee Details', 'Payments', 'Deductions', etc.
                 for section in re.split(r'  +', line):
@@ -41,10 +40,10 @@ def parse_payslip(payslip_text):
             for section_index in range(0, 3):
                 start_char = current_sections[section_index][1]
                 element_text = line[start_char:start_char + 45]
-                parts = re.split(r'  +', element_text)
-                if len(parts) >= 2:
-                    element_name = parts[0].strip()
-                    element_value = parts[1].strip()
+                element_parts = re.split(r'  +', element_text)
+                if len(element_parts) >= 2:
+                    element_name = element_parts[0].strip()
+                    element_value = element_parts[1].strip()
                     section_name = current_sections[section_index][0]
                     payslip_data[section_name][element_name] = element_value
                     # all_elements.add(element_name)
