@@ -10,6 +10,7 @@ payslips = sys.argv[1:]
 # all_sections = set()
 # all_elements = set()
 
+
 def parse_payslip(payslip):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
     text_content = str(subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8"))
@@ -57,20 +58,20 @@ output.writerow(['Tax code',
                  'Tax', 'NI', 'Salary Sacrifice',
                  'Taxable gross pay', 'Employer NI', 'Net pay'])
 
-for file_data in payslips_data:
+for payslip_data in payslips_data:
     output.writerow([
-        file_data['Employee Details']['Tax code'],
-        file_data['Month Ending'],
+        payslip_data['Employee Details']['Tax code'],
+        payslip_data['Month Ending'],
         # data['Employee Details']['Works number'],
-        file_data['Payments']['Monthly pay'],
-        file_data['Payments']['Bonus'],
-        file_data['Payments']['Additional pay'],
-        file_data['Deductions']['Tax'],
-        file_data['Deductions']['National Insurance'],
-        file_data['Deductions']['Salary Sacrifice'],
-        file_data['This Month']['Taxable gross pay'],
-        file_data['This Month']['Employer National Insurance'],
-        file_data['This Month']['Net pay']
+        payslip_data['Payments']['Monthly pay'],
+        payslip_data['Payments']['Bonus'],
+        payslip_data['Payments']['Additional pay'],
+        payslip_data['Deductions']['Tax'],
+        payslip_data['Deductions']['National Insurance'],
+        payslip_data['Deductions']['Salary Sacrifice'],
+        payslip_data['This Month']['Taxable gross pay'],
+        payslip_data['This Month']['Employer National Insurance'],
+        payslip_data['This Month']['Net pay']
         ]
     )
 
