@@ -12,7 +12,7 @@ payslips = sys.argv[1:]
 
 
 def parse_payslip(payslip_text):
-    file_data = defaultdict(lambda: defaultdict(lambda: ''))
+    payslip_data = defaultdict(lambda: defaultdict(lambda: ''))
     current_sections = []
     for line in payslip_text.splitlines():
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
@@ -24,7 +24,7 @@ def parse_payslip(payslip_text):
             # Month Ending needs special treatment
             if re.match(r'.*Month Ending.*', line):
                 parts = re.split(r'Month Ending', line)
-                file_data['Heading']['Month Ending'] = parts[1].strip()
+                payslip_data['Heading']['Month Ending'] = parts[1].strip()
             else:
                 # Otherwise, we're mostly Section definitions, like 'Employee Details', 'Payments', 'Deductions', etc.
                 for section in re.split(r'  +', line):
@@ -44,9 +44,9 @@ def parse_payslip(payslip_text):
                     element_name = parts[0].strip()
                     element_value = parts[1].strip()
                     section_name = current_sections[section_index][0]
-                    file_data[section_name][element_name] = element_value
+                    payslip_data[section_name][element_name] = element_value
                     # all_elements.add(element_name)
-    return file_data
+    return payslip_data
 
 
 payslips_text = [subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8") for payslip in payslips]
