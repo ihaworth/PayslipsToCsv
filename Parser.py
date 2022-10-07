@@ -4,15 +4,15 @@ import subprocess
 import sys
 from collections import defaultdict
 
-pdf_files = sys.argv[1:]
+payslips = sys.argv[1:]
 
 # Uncomment these and related lines to see all Sections and/or Elements in the input files
 # all_sections = set()
 # all_elements = set()
 
-def parse_payslip(pdf_file):
+def parse_payslip(payslip):
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
-    text_content = str(subprocess.check_output(['pdftotext', '-layout', pdf_file, '-'], encoding="utf-8"))
+    text_content = str(subprocess.check_output(['pdftotext', '-layout', payslip, '-'], encoding="utf-8"))
     for line in text_content.splitlines():
         # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
         # It also includes Month Ending, plus a few false positives that we parse but don't output
@@ -55,8 +55,8 @@ output.writerow(['Tax code',
                  'Tax', 'NI', 'Salary Sacrifice',
                  'Taxable gross pay', 'Employer NI', 'Net pay'])
 
-for pdf_file in pdf_files:
-    file_data = parse_payslip(pdf_file)
+for payslip in payslips:
+    file_data = parse_payslip(payslip)
 
     output.writerow([
         file_data['Employee Details']['Tax code'],
