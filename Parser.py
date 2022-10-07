@@ -4,8 +4,6 @@ import subprocess
 import sys
 from collections import defaultdict
 
-payslips = sys.argv[1:]
-
 # Uncomment these and related lines to see all Sections and/or Elements in the input files
 # all_sections = set()
 # all_elements = set()
@@ -77,6 +75,7 @@ def write_csv(payslips_data, output_stream=sys.stdout):
         ])
 
 
+payslips = sys.argv[1:]
 payslips_text = [pdftotext(payslip) for payslip in payslips]
 payslips_data = [parse_payslip(payslip_text) for payslip_text in payslips_text]
 write_csv(payslips_data)
