@@ -48,14 +48,14 @@ def parse_payslip(payslip):
     return file_data
 
 
+payslips_data = [parse_payslip(payslip) for payslip in payslips]
+
 output = csv.writer(sys.stdout)
 output.writerow(['Tax code',
                  'Month Ending',
                  'Monthly pay', 'Bonus', 'Additional pay',
                  'Tax', 'NI', 'Salary Sacrifice',
                  'Taxable gross pay', 'Employer NI', 'Net pay'])
-
-payslips_data = [parse_payslip(payslip) for payslip in payslips]
 
 for file_data in payslips_data:
     output.writerow([
