@@ -55,9 +55,9 @@ output.writerow(['Tax code',
                  'Tax', 'NI', 'Salary Sacrifice',
                  'Taxable gross pay', 'Employer NI', 'Net pay'])
 
-for payslip in payslips:
-    file_data = parse_payslip(payslip)
+payslips_data = [parse_payslip(payslip) for payslip in payslips]
 
+for file_data in payslips_data:
     output.writerow([
         file_data['Employee Details']['Tax code'],
         file_data['Month Ending'],
