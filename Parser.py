@@ -13,6 +13,7 @@ output.writerow(['Tax code',
                  'Tax', 'NI', 'Salary Sacrifice',
                  'Taxable gross pay', 'Employer NI', 'Net pay'])
 
+# Uncomment these and related lines to see all Sections and/or Elements in the input files
 # all_sections = set()
 # all_elements = set()
 
@@ -20,7 +21,7 @@ for pdf_file in pdf_files:
     file_data = defaultdict(lambda: defaultdict(lambda: ''))
     text_content = str(subprocess.check_output(['pdftotext', '-layout', pdf_file, '-'], encoding="utf-8"))
     for line in text_content.splitlines():
-        # Section details are lines that start immediately at the first char of the line
+        # Lines that start immediately at the first char of the line are mostly Sections like 'Employee Details'
         # It also includes Month Ending, plus a few false positives that we parse but don't output
         if re.match(r'^[A-Z]', line):
             # Reset data about the previous section, so we don't have pollution
@@ -31,7 +32,7 @@ for pdf_file in pdf_files:
                 parts = re.split(r'Month Ending', line)
                 file_data['Month Ending'] = parts[1].strip()
             else:
-                # Otherwise, we're mostly Section definitions, like Employee Details, Payments, Deductions, etc.
+                # Otherwise, we're mostly Section definitions, like 'Employee Details', 'Payments', 'Deductions', etc.
                 for section in re.split(r'  +', line):
                     section = section.strip()
                     start_x = line.find(section)
@@ -48,7 +49,8 @@ for pdf_file in pdf_files:
                 if len(parts) >= 2:
                     element_name = parts[0].strip()
                     element_value = parts[1].strip()
-                    file_data[current_sections[section_index][0]][element_name] = element_value
+                    section_name = current_sections[section_index][0]
+                    file_data[section_name][element_name] = element_value
                     # all_elements.add(element_name)
 
     output.writerow([
