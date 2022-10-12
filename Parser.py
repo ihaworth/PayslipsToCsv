@@ -14,6 +14,7 @@ def pdf_to_text(payslip):
 
 
 def parse_payslip(payslip_text):
+    # the data is stored under section and element: payslip_data[<section_name>][<element_name>]
     payslip_data = defaultdict(lambda: defaultdict(lambda: ''))
     current_sections = []
     for line in payslip_text.splitlines():
