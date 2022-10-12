@@ -46,7 +46,7 @@ def parse_payslip(payslip_text):
                     element_name, element_value = [part.strip() for part in element_parts[0:2]]
                     section_name = current_sections[section_index][0]
                     payslip_data[section_name][element_name] = element_value
-                    #all_elements.add(section_name + ":" + element_name)
+                    # all_elements.add(section_name + ":" + element_name)
     return payslip_data
 
 
