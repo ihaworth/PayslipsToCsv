@@ -1,4 +1,4 @@
-# Payslip Parser
+# Payslips to CSV
 Extracts pay information from multiple Bright Pay pdf payslips and presents it
 in csv form, handy for processing with a spreadsheet or similar.
 
@@ -22,14 +22,14 @@ Then to install `pdftotext` you need to install the poppler utils package:
 ## Use
 
 Get the pdf payslips you want to work with in a location where they can be easily accessed,
-usually all in 1 directory. Also add the Parser.py file from this repo.
+usually all in 1 directory. Also add the PayslipsToCsv.py file from this repo.
 
 Then, in a terminal, run:
 
-`python3 Parser.py *.pdf`
+`python3 PayslipsToCsv.py *.pdf`
 
 This will generate output in the terminal which can be copied 'n' pasted elsewhere.
 
 If you prefer the csv data in a file, then use:
 
-`python3 Parser.py *.pdf > my_payslip_data.csv`
+`python3 PayslipsToCsv.py *.pdf > my_payslip_data.csv`
